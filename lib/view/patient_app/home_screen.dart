@@ -10,55 +10,44 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String selectedMood = "";
-  String hoveredMood = "";
 
-  Widget buildMoodItem({required dynamic moodName, required dynamic iconName, required dynamic color}) {
+  Widget buildMoodItem({required String moodName, required IconData iconName, required Color color}) {
     bool isSelected = selectedMood == moodName;
-    bool isHovered = hoveredMood == moodName;
 
-    return MouseRegion(
-      onEnter: (_) => setState(() {
-        hoveredMood = moodName;
-      }),
-      onExit: (_) => setState(() {
-        hoveredMood = "";
-      }),
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
           selectedMood = moodName;
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? color.withAlpha(50)
-                : (isHovered ? Colors.grey.shade100 : Colors.transparent),
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-              color: isSelected ? color : Colors.transparent,
-              width: 2,
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: isSelected ? color.withAlpha(50) : Colors.transparent,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: isSelected ? color : Colors.transparent,
+            width: 2,
+          ),
+        ),
+        child: Column(
+          children: [
+            Icon(
+              iconName,
+              size: isSelected ? 45 : 35,
+              color: isSelected ? color : Colors.blueGrey,
             ),
-          ),
-          child: Column(
-            children: [
-              Icon(
-                iconName,
-                size: isHovered || isSelected ? 45 : 35, // Pop effect
-                color: isSelected ? color : Colors.blueGrey,
+            const SizedBox(height: 5),
+            Text(
+              moodName,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected ? color : Colors.grey,
               ),
-              const SizedBox(height: 5),
-              Text(
-                moodName,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected ? color : Colors.grey,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -69,81 +58,106 @@ class _HomeScreenState extends State<HomeScreen> {
       case "HAPPY":
         return Column(
           children: [
-            Text("SELECT TAGS THAT DESCRIBE YOUR HAPPY MOOD:"),
-            SizedBox(height: 20),
-            Wrap(
-              spacing: 10,
-              children: [
-                ElevatedButton(onPressed: () {}, child: Text("Joyful")),
-                ElevatedButton(onPressed: () {}, child: Text("Excited")),
-                ElevatedButton(onPressed: () {}, child: Text("Productive")),
-                ElevatedButton(onPressed: () {}, child: Text("Social")),
-              ],
+            const Text("SELECT TAGS THAT DESCRIBE YOUR HAPPY MOOD:"),
+            const SizedBox(height: 20),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.all(7),
+              child: Row(
+                spacing: 10,
+                children: [
+                  ElevatedButton(onPressed: () {}, child: const Text("Joyful")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Excited")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Productive")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Social")),
+                ],
+              ),
             ),
           ],
         );
       case "SAD":
         return Column(
           children: [
-            Text("SELECT TAGS THAT DESCRIBE YOUR SAD MOOD:"),
-            SizedBox(height: 20),
-            Wrap(
-              spacing: 10,
-              children: [
-                ElevatedButton(onPressed: () {}, child: Text("Lonely")),
-                ElevatedButton(onPressed: () {}, child: Text("Tired")),
-                ElevatedButton(onPressed: () {}, child: Text("Grief")),
-                ElevatedButton(onPressed: () {}, child: Text("Low Energy")),
-              ],
+            const Text("SELECT TAGS THAT DESCRIBE YOUR SAD MOOD:"),
+            const SizedBox(height: 20),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.all(7),
+              child: Row(
+                spacing: 10,
+                children: [
+                  ElevatedButton(onPressed: () {}, child: const Text("Lonely")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Tired")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Grief")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Low Energy")),
+                ],
+              ),
             ),
           ],
         );
       case "ANXIOUS":
         return Column(
           children: [
-            Text("SELECT TAGS THAT DESCRIBE YOUR ANXIOUS MOOD:"),
-            SizedBox(height: 20),
-            Wrap(
-              spacing: 10,
-              runSpacing: 12,
-              children: [
-                ElevatedButton(onPressed: () {}, child: Text("Restless")),
-                ElevatedButton(onPressed: () {}, child: Text("Panicked")),
-                ElevatedButton(onPressed: () {}, child: Text("Streesed")),
-                ElevatedButton(onPressed: () {}, child: Text("Worried")),
-              ],
+            const Text("SELECT TAGS THAT DESCRIBE YOUR ANXIOUS MOOD:"),
+            const SizedBox(height: 20),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.all(7),
+              child: Row(
+                spacing: 10,
+                // runSpacing: 12,
+                children: [
+                  ElevatedButton(onPressed: () {}, child: const Text("Restless")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Panicked")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Streesed")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Worried")),
+                ],
+              ),
             ),
           ],
         );
       case "CALM":
         return Column(
           children: [
-            Text("SELECT TAGS THAT DESCRIBE YOUR CALM MOOD:"),
-            SizedBox(height: 20),
-            Wrap(
-              spacing: 10,
-              children: [
-                ElevatedButton(onPressed: () {}, child: Text("Peaceful")),
-                ElevatedButton(onPressed: () {}, child: Text("Mindful")),
-                ElevatedButton(onPressed: () {}, child: Text("Content")),
-                ElevatedButton(onPressed: () {}, child: Text("Rested")),
-              ],
+            const Text("SELECT TAGS THAT DESCRIBE YOUR CALM MOOD:"),
+            const SizedBox(height: 20),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.all(7),
+              child: Row(
+                spacing: 10,
+                children: [
+                  ElevatedButton(onPressed: () {}, child: const Text("Peaceful")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Mindful")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Content")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Rested")),
+                ],
+              ),
             ),
           ],
         );
       case "OKAY":
         return Column(
           children: [
-            Text("SELECT TAGS THAT DESCRIBE YOUR OKAY MOOD:"),
-            SizedBox(height: 20),
-            Wrap(
-              spacing: 10,
-              children: [
-                ElevatedButton(onPressed: () {}, child: Text("Bored")),
-                ElevatedButton(onPressed: () {}, child: Text("Uncertain")),
-                ElevatedButton(onPressed: () {}, child: Text("Neutral")),
-                ElevatedButton(onPressed: () {}, child: Text("Quiet")),
-              ],
+            const Text("SELECT TAGS THAT DESCRIBE YOUR OKAY MOOD:"),
+            const SizedBox(height: 20),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.all(7),
+              child: Row(
+                spacing: 10,
+                children: [
+                  ElevatedButton(onPressed: () {}, child: const Text("Bored")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Uncertain")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Neutral")),
+                  ElevatedButton(onPressed: () {}, child: const Text("Quiet")),
+                ],
+              ),
             ),
           ],
         );
@@ -156,13 +170,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedCustomAppBar(
-        // rightWidget: null,
-        profileIcon: Icon(Icons.person),
+        profileIcon: const Icon(Icons.person),
         minHeight: 50,
         maxHeight: 120,
-
         centerWidget: RichText(
-          text: TextSpan(
+          text: const TextSpan(
             text: "Good Morning, User!!",
             style: TextStyle(color: Colors.black, fontSize: 25),
             children: [
@@ -179,7 +191,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Card(
               elevation: 7,
               color: Colors.white,
-
               child: Column(
                 children: [
                   Container(
@@ -189,9 +200,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: Image.asset("name"),
                   ),
-                  SizedBox(height: 20),
-
-                  Row(
+                  const SizedBox(height: 20),
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircleAvatar(child: Icon(Icons.mic_none_outlined)),
@@ -199,8 +209,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       CircleAvatar(child: Icon(Icons.card_giftcard)),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  Text(
+                  const SizedBox(height: 20),
+                  const Text(
                     "Tap to tell me something",
                     style: TextStyle(fontSize: 20, color: Colors.grey),
                   ),
@@ -208,7 +218,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.all(7.0),
             child: Card(
@@ -218,11 +227,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(7.0),
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       "How are you feeling today ?",
                       style: TextStyle(fontSize: 20, color: Colors.black),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Row(
@@ -256,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    if (selectedMood.isNotEmpty) Divider(height: 10),
+                    if (selectedMood.isNotEmpty) const Divider(height: 10),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: _buildMoodDetailWidget(selectedMood),
@@ -270,12 +279,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        onPressed: () {
-          
-        },
+        onPressed: () {},
         shape: const CircleBorder(),
-        
-        child: Icon(Icons.warning_amber, size: 30, color: Colors.white,),
+        child: const Icon(Icons.warning_amber, size: 30, color: Colors.white),
       ),
     );
   }

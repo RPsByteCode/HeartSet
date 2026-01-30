@@ -1,7 +1,9 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:mhc/view/patient_app/home_screen.dart';
+import 'package:mhc/login_signUp.dart';
+import 'package:mhc/selectUserType.dart';
+// import 'package:mhc/view/patient_app/home_screen.dart';
 
 
 void main(){
@@ -15,12 +17,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
-      // home: Scaffold(
-      //   body: HomeScreen(),
-      //   bottomNavigationBar:NavBar()
-      // ),
-      
+      home: LoginScreen(),
     );
   }
 }

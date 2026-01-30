@@ -12,7 +12,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String selectedMood = "";
   String hoveredMood = "";
 
-  Widget buildMoodItem({required moodName, required iconName, required color}) {
+  Widget buildMoodItem({required dynamic moodName, required dynamic iconName, required dynamic color}) {
     bool isSelected = selectedMood == moodName;
     bool isHovered = hoveredMood == moodName;
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "566189193301",
+    "project_id": "heartset-b0f3f",
+    "storage_bucket": "heartset-b0f3f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566189193301:android:d0323f8b2a43edced67cdc",
+        "android_client_info": {
+          "package_name": "com.example.mhc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6jC3nrcp1NWjhcQT3BYqoRPq4imDY2XE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

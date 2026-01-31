@@ -1,5 +1,8 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:mhc/signUpScreen.dart';
 
 enum UserType { patient, consultant, institute, guardian }
 
@@ -163,7 +166,18 @@ class _SelectUserTypeScreenState extends State<SelectUserTypeScreen> {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(seconds: 1),
+                        reverseTransitionDuration: const Duration( seconds: 1),
+                        pageBuilder: (context, animation, secondaryAnimation) => SignUpScreen(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          return SharedAxisTransition(animation: animation, secondaryAnimation: secondaryAnimation, transitionType: SharedAxisTransitionType.horizontal, child: child,);
+                        },
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: activeData.color,
                     foregroundColor: Colors.white,

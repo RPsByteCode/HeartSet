@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   animated_custom_appbar: ^1.0.4
+  animations: ^2.1.1
 
 dev_dependencies:
   flutter_test:

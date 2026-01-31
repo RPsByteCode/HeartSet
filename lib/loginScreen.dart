@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Image.asset("appIcon.jpg"),
+                child: Image.asset("assets/images/appIcon.png", fit: BoxFit.cover,),
               ),
             ),
             const SizedBox(height: 10),

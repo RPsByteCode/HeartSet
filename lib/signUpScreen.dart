@@ -173,7 +173,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Image.asset("appIcon.jpg"),
+                    child: Image.asset("assets/images/appIcon.png", fit: BoxFit.cover,),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -337,7 +337,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       return Colors.deepPurpleAccent;
                     }),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    
+                  },
                   child: Text(
                     "CREATE ACCOUNT",
                     style: TextStyle(

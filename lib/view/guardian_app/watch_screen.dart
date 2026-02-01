@@ -28,7 +28,6 @@ class _GuardianModeScreenState extends State<GuardianModeScreen> {
             const Spacer(flex: 2),
             _buildPrivacyCard(),
             const SizedBox(height: 20),
-            _buildBottomNav(),
           ],
         ),
       ),
@@ -153,35 +152,6 @@ class _GuardianModeScreenState extends State<GuardianModeScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildBottomNav() {
-    return Column(
-      children: [
-        const Divider(height: 1),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _navItem(Icons.visibility, "WATCH", true),
-              _navItem(Icons.notifications_none, "ALERTS", false),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _navItem(IconData icon, String label, bool isActive) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: isActive ? Colors.black : Colors.grey.shade400),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: isActive ? Colors.black : Colors.grey.shade400)),
-      ],
     );
   }
 }

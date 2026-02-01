@@ -85,14 +85,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
           )
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.book_online), label: 'Diary'),
-          BottomNavigationBarItem(icon: Icon(Icons.support), label: 'Support'),
-        ],
-        currentIndex: 1,
-      ),
     );
   }
 

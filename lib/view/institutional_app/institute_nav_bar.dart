@@ -1,9 +1,8 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:mhc/view/patient_app/home_screen.dart';
-import 'package:mhc/view/patient_app/dairy_screen.dart';
-import 'package:mhc/view/patient_app/support_screen.dart';
+
+
 
 
 class PatientNavBar extends StatefulWidget {
@@ -20,11 +19,11 @@ class _NavBarState extends State<PatientNavBar> {
   pages(int currentPage) {
     switch (currentPage) {
       case 0:
-        return HomeScreen();
+        return ();
       case 1:
-        return DiaryScreen();
+        return ();
       case 2:
-        return SupportScreen();
+        return ();
       
     }
   }
@@ -42,21 +41,19 @@ class _NavBarState extends State<PatientNavBar> {
           setState(() {});
         },
         items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book_outlined),
-            label: "Dairy",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.warning_amber),
-            label: "Support",
-          ),
-        ],
-      
-    ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.home),
+          //   label: "Home",
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.book_outlined),
+          //   label: "Dairy",
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.warning_amber),
+          //   label: "Support",
+          // ),
+        ],),
     );
   }
 }

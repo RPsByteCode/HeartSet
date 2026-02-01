@@ -1,30 +1,31 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:mhc/view/patient_app/home_screen.dart';
-import 'package:mhc/view/patient_app/dairy_screen.dart';
-import 'package:mhc/view/patient_app/support_screen.dart';
+import 'package:mhc/view/guardian_app/alerts_screen.dart';
+import 'package:mhc/view/guardian_app/watch_screen.dart';
+import 'package:mhc/view/guardian_app/weekly_update_screen.dart';
 
 
-class PatientNavBar extends StatefulWidget {
 
-  const PatientNavBar({super.key});
+class GaurdianNavBar extends StatefulWidget {
+
+  const GaurdianNavBar({super.key});
 
   @override
-  State<PatientNavBar> createState() => _NavBarState();
+  State<GaurdianNavBar> createState() => _NavBarState();
 }
 
-class _NavBarState extends State<PatientNavBar> {
+class _NavBarState extends State<GaurdianNavBar> {
   int currentPage = 0;
 
   pages(int currentPage) {
     switch (currentPage) {
       case 0:
-        return HomeScreen();
+        return GuardianModeScreen();
       case 1:
-        return DiaryScreen();
+        return EmergencyAlertScreen();
       case 2:
-        return SupportScreen();
+        return WeeklyMoodOverviewScreen();
       
     }
   }
@@ -33,6 +34,7 @@ class _NavBarState extends State<PatientNavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: pages(currentPage),
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
         selectedItemColor: Colors.blue,
@@ -43,20 +45,20 @@ class _NavBarState extends State<PatientNavBar> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book_outlined),
-            label: "Dairy",
+            icon: Icon(Icons.remove_red_eye_outlined),
+            label: "Watch",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.warning_amber),
+            label: "Alert",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.support),
             label: "Support",
           ),
         ],
       
-    ),
+    )
     );
   }
 }

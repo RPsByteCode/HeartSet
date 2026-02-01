@@ -76,17 +76,7 @@ class _ConsultantDashboardState extends State<ConsultantDashboard> {
             _buildRiskOverviewCard(),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.teal,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.people_outline), label: 'Patients'),
-          BottomNavigationBarItem(icon: Icon(Icons.group_outlined), label: 'Groups'),
-        ],
-      ),
+      )
     );
   }
 

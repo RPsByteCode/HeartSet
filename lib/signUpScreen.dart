@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:mhc/loginScreen.dart';
+import 'package:mhc/testScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -320,9 +321,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ElevatedButton(
                   style: ButtonStyle(
                     minimumSize: WidgetStateProperty.all(Size(350, 60)),
-                    elevation: WidgetStateProperty.resolveWith<double>((
-                      Set<WidgetState> states,
-                    ) {
+                    elevation: WidgetStateProperty.resolveWith<double>((states){
                       if (states.contains(WidgetState.pressed)) {
                         return 2.0; // Sinks when pressed
                       }
@@ -370,7 +369,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           PageRouteBuilder(
                             transitionDuration: const Duration(milliseconds: 500),
                             reverseTransitionDuration: const Duration( milliseconds: 500),
-                            pageBuilder: (context, animation, secondaryAnimation) => LoginScreen(),
+                            pageBuilder: (context, animation, secondaryAnimation) => TestScreen(),
                             transitionsBuilder: (context, animation, secondaryAnimation, child) {
                               return SharedAxisTransition(animation: animation, secondaryAnimation: secondaryAnimation, transitionType: SharedAxisTransitionType.horizontal, child: child,);
                             },

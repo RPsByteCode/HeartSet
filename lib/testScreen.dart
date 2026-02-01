@@ -1,30 +1,31 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:mhc/view/patient_app/home_screen.dart';
-import 'package:mhc/view/patient_app/dairy_screen.dart';
-import 'package:mhc/view/patient_app/support_screen.dart';
+import 'package:mhc/view/consultant_app/consultant_nav_bar.dart';
+import 'package:mhc/view/guardian_app/gaurdian_nav_bar.dart';
+import 'package:mhc/view/patient_app/patient_nav_bar.dart';
 
 
-class PatientNavBar extends StatefulWidget {
 
-  const PatientNavBar({super.key});
+class TestScreen extends StatefulWidget {
+
+  const TestScreen({super.key});
 
   @override
-  State<PatientNavBar> createState() => _NavBarState();
+  State<TestScreen> createState() => _NavBarState();
 }
 
-class _NavBarState extends State<PatientNavBar> {
+class _NavBarState extends State<TestScreen> {
   int currentPage = 0;
 
   pages(int currentPage) {
     switch (currentPage) {
       case 0:
-        return HomeScreen();
+        return PatientNavBar();
       case 1:
-        return DiaryScreen();
+        return ConsultantNavBar();
       case 2:
-        return SupportScreen();
+        return GaurdianNavBar();
       
     }
   }

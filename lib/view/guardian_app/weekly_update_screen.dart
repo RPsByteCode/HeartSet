@@ -74,7 +74,6 @@ class WeeklyMoodOverviewScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          _buildBottomNav(),
         ],
       ),
     );
@@ -170,34 +169,6 @@ class WeeklyMoodOverviewScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNav() {
-    return Column(
-      children: [
-        const Divider(height: 1),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _navItem(Icons.visibility, "WATCH", true),
-              _navItem(Icons.notifications_none, "ALERTS", false),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _navItem(IconData icon, String label, bool isActive) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: isActive ? Colors.black : Colors.grey.shade400),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: isActive ? Colors.black : Colors.grey.shade400)),
-      ],
-    );
-  }
 }
 
 // Custom Painter for the Mood Line Chart

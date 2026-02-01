@@ -1,30 +1,31 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:mhc/view/patient_app/home_screen.dart';
-import 'package:mhc/view/patient_app/dairy_screen.dart';
-import 'package:mhc/view/patient_app/support_screen.dart';
+import 'package:mhc/view/consultant_app/group_screen.dart';
+import 'package:mhc/view/consultant_app/home_screen.dart';
+import 'package:mhc/view/consultant_app/individual_screen.dart';
 
 
-class PatientNavBar extends StatefulWidget {
 
-  const PatientNavBar({super.key});
+class ConsultantNavBar extends StatefulWidget {
+
+  const ConsultantNavBar({super.key});
 
   @override
-  State<PatientNavBar> createState() => _NavBarState();
+  State<ConsultantNavBar> createState() => _NavBarState();
 }
 
-class _NavBarState extends State<PatientNavBar> {
+class _NavBarState extends State<ConsultantNavBar> {
   int currentPage = 0;
 
   pages(int currentPage) {
     switch (currentPage) {
       case 0:
-        return HomeScreen();
+        return ConsultantDashboard();
       case 1:
-        return DiaryScreen();
+        return IndividualScreen();
       case 2:
-        return SupportScreen();
+        return GroupScreen();
       
     }
   }
@@ -33,7 +34,7 @@ class _NavBarState extends State<PatientNavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: pages(currentPage),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar:  BottomNavigationBar(
         currentIndex: currentPage,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
@@ -47,12 +48,12 @@ class _NavBarState extends State<PatientNavBar> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book_outlined),
-            label: "Dairy",
+            icon: Icon(Icons.person_2_outlined),
+            label: "Individuals",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.warning_amber),
-            label: "Support",
+            icon: Icon(Icons.group_outlined),
+            label: "Groups",
           ),
         ],
       

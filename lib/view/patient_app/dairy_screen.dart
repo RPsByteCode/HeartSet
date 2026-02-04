@@ -78,9 +78,11 @@ class _DiaryScreenState extends State<DiaryScreen> {
             bottom: 20,
             right: 20,
             child: FloatingActionButton(
-              backgroundColor: Colors.red,
-              onPressed: () {},
-              child: const Icon(Icons.report_problem_outlined, color: Colors.white),
+              backgroundColor: Colors.blue,
+              onPressed: () {
+                
+              },
+              child: const Icon(Icons.add, color: Colors.white),
             ),
           )
         ],

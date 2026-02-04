@@ -1,9 +1,9 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:mhc/view/consultant_app/group_screen.dart';
+import 'package:mhc/view/consultant_app/group_screens/group_screen.dart';
 import 'package:mhc/view/consultant_app/home_screen.dart';
-import 'package:mhc/view/consultant_app/individual_screen.dart';
+import 'package:mhc/view/consultant_app/individual_screens/individual_screen.dart';
 
 
 

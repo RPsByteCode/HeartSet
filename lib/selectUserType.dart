@@ -1,26 +1,10 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart'; 
+import 'package:mhc/controller/user_Controller.dart';
+import 'package:mhc/modal/user_modal.dart';
 import 'dart:math' as math;
 
 import 'package:mhc/signUpScreen.dart';
-
-enum UserType { patient, consultant, institute, guardian }
-
-class UserTypeData {
-  final String title;
-  final String description;
-  final IconData icon;
-  final Color color;
-  final String btnText;
-
-  UserTypeData({
-    required this.title,
-    required this.description,
-    required this.icon,
-    required this.color,
-    required this.btnText,
-  });
-}
 
 class SelectUserTypeScreen extends StatefulWidget {
   const SelectUserTypeScreen({super.key});
@@ -30,7 +14,8 @@ class SelectUserTypeScreen extends StatefulWidget {
 }
 
 class _SelectUserTypeScreenState extends State<SelectUserTypeScreen> {
-  UserType selectedType = UserType.patient;
+  // Inject the controller to manage selected state
+  final UserController usrCtr = Get.put(UserController());
 
   // Data mapping for each user type
   final Map<UserType, UserTypeData> _userData = {
@@ -66,154 +51,126 @@ class _SelectUserTypeScreenState extends State<SelectUserTypeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final activeData = _userData[selectedType]!;
-
     return Scaffold(
-      backgroundColor:  Colors.white54,
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              const Text(
-                "Select User Type",
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                "Choose your role to get started",
-                style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
-              ),
-              const Spacer(),
-              
-              // Interactive Circular Selector
-              SizedBox(
-                height: 300,
-                width: 300,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // The Dashed Circle Path
-                    Container(
-                      width: 230,
-                      height: 230,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.grey.shade400,
-                          width: 1,
-                          style: BorderStyle.solid, // Use a custom painter for true dashed if needed
+        child: Obx(() {
+          final activeType = usrCtr.selectedType.value;
+          final activeData = _userData[activeType]!;
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 40),
+                const Text(
+                  "Select User Type",
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  "Choose your role to get started",
+                  style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
+                ),
+                const Spacer(),
+                
+                // Interactive Circular Selector
+                SizedBox(
+                  height: 300,
+                  width: 300,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Orbital Path
+                      Container(
+                        width: 230,
+                        height: 230,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.grey.shade200, width: 2),
                         ),
                       ),
-                    ),
-                    
-                    // Central Selected Icon
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        border: Border.all(color: activeData.color.withOpacity(0.5), width: 3),
-                        boxShadow: [
-                          BoxShadow(
-                            color: activeData.color,
-                            blurRadius: 25,
-                            spreadRadius: 2,
-                          )
-                        ],
-                      ),
-                      child: Icon(activeData.icon, size: 40, color: activeData.color),
-                    ),
+                      
+                      // Central Selected Icon
+                      _buildCentralCircle(activeData),
 
-                    // Satellite Icons
-                    _buildSatelliteIcon(UserType.patient, -math.pi / 2),    // Top
-                    _buildSatelliteIcon(UserType.consultant, 0),           // Right
-                    _buildSatelliteIcon(UserType.institute, math.pi / 2),   // Bottom
-                    _buildSatelliteIcon(UserType.guardian, math.pi),       // Left
-                  ],
-                ),
-              ),
-              
-              const Spacer(),
-
-              // Text Info Section
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: Column(
-                  key: ValueKey(selectedType),
-                  children: [
-                    Text(
-                      activeData.title,
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: activeData.color),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      activeData.description,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 15, color: Color(0xFF475569), height: 1.5),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 60),
-
-              // Action Button
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      PageRouteBuilder(
-                        transitionDuration: const Duration(seconds: 1),
-                        reverseTransitionDuration: const Duration( seconds: 1),
-                        pageBuilder: (context, animation, secondaryAnimation) => SignUpScreen(),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          return SharedAxisTransition(animation: animation, secondaryAnimation: secondaryAnimation, transitionType: SharedAxisTransitionType.horizontal, child: child,);
-                        },
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: activeData.color,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    elevation: 0,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(activeData.btnText, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                      const SizedBox(width: 8),
-                      const Icon(Icons.chevron_right, size: 24),
+                      // Satellite Icons
+                      _buildSatelliteIcon(UserType.patient, -math.pi / 2),
+                      _buildSatelliteIcon(UserType.consultant, 0),
+                      _buildSatelliteIcon(UserType.institute, math.pi / 2),
+                      _buildSatelliteIcon(UserType.guardian, math.pi),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
+                
+                const Spacer(),
+
+                // Animated Text Section
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 400),
+                  transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
+                  child: Column(
+                    key: ValueKey(activeType),
+                    children: [
+                      Text(
+                        activeData.title,
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: activeData.color),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        activeData.description,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 15, color: Color(0xFF475569), height: 1.5),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 60),
+
+                // Action Button with Navigation Arguments (Option B)
+                _buildConfirmButton(activeData, activeType),
+                const SizedBox(height: 20),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
 
+  Widget _buildCentralCircle(UserTypeData data) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      width: 120,
+      height: 120,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+        border: Border.all(color: data.color.withOpacity(0.5), width: 3),
+        boxShadow: [
+          BoxShadow(
+            color: data.color.withOpacity(0.3),
+            blurRadius: 25,
+            spreadRadius: 2,
+          )
+        ],
+      ),
+      child: Icon(data.icon, size: 40, color: data.color),
+    );
+  }
+
   Widget _buildSatelliteIcon(UserType type, double angle) {
-    final isSelected = selectedType == type;
+    final isSelected = usrCtr.selectedType.value == type;
     final data = _userData[type]!;
     
-    // Position on the circle (Radius = 110)
     double x = 110 * math.cos(angle);
     double y = 110 * math.sin(angle);
 
     return Transform.translate(
       offset: Offset(x, y),
       child: GestureDetector(
-        onTap: () => setState(() => selectedType = type),
+        onTap: () => usrCtr.updateUserType(type),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -232,7 +189,7 @@ class _SelectUserTypeScreenState extends State<SelectUserTypeScreen> {
                   )
                 ],
                 border: Border.all(
-                  color: isSelected ? Colors.transparent : Colors.grey.withOpacity(0.1),
+                  color: isSelected ? Colors.transparent : Colors.grey.shade200,
                 ),
               ),
               child: Icon(
@@ -250,6 +207,38 @@ class _SelectUserTypeScreenState extends State<SelectUserTypeScreen> {
                 color: isSelected ? data.color : const Color(0xFF94A3B8),
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildConfirmButton(UserTypeData data, UserType type) {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton(
+        onPressed: () {
+          Get.to(
+            () => const SignUpScreen(),
+            arguments: type, // Passing the Enum
+            transition: Transition.rightToLeftWithFade,
+            duration: const Duration(milliseconds: 600),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: data.color,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: 4,
+          shadowColor: data.color.withOpacity(0.4),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(data.btnText, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            const SizedBox(width: 8),
+            const Icon(Icons.chevron_right, size: 24),
           ],
         ),
       ),

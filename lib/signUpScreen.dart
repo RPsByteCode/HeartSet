@@ -1,6 +1,6 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:mhc/loginScreen.dart';
+import 'package:get/get.dart';
+import 'package:mhc/controller/user_Controller.dart';
 import 'package:mhc/testScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -11,379 +11,172 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-
   bool hide = true;
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-
   TextEditingController oneController = TextEditingController();
   TextEditingController twoController = TextEditingController();
   TextEditingController threeController = TextEditingController();
 
-  Map userData = {
-    "Patient":["Age","Emergency Contact"],
-    "Consultant":["Specialization", "Years Of Experience","Consultation Fees"],
-    "Gaurdian":["Relation To Patient", "Patient Email", "Phone Number"],
-    "Institute":["Organization Name", "Address", "Type"]
+  // Keys match the Enum names for easier mapping
+  final Map<String, List<String>> userData = {
+    "patient": ["Age", "Emergency Contact"],
+    "consultant": ["Specialization", "Years Of Experience", "Consultation Fees"],
+    "guardian": ["Relation To Patient", "Patient Email", "Phone Number"],
+    "institute": ["Organization Name", "Address", "Type"]
   };
 
-  Widget userTypeField({required String userType}){
-    List fields = userData[userType];
+  Widget userTypeField({required UserType userType}) {
+    String key = userType.name;
+    List<String> fields = userData[key] ?? ["Field 1", "Field 2"];
+
     return Column(
       children: [
-        Row(
-          children: [
-              Padding(
-                padding: const EdgeInsets.all(7.0),
-                child: Text(
-                  "${userData[userType][0]}",
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          TextField(
-          controller: oneController,
-          decoration: InputDecoration(
-            label: Text("Enter data"),
-            prefixIcon: Icon(Icons.data_saver_on_sharp),
-
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.grey, width: 1.5),
-            ),
-
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.blue, width: 3),
-            ),
-          ),
-        ),
-                const SizedBox(height: 10),
-
-        Row(
-          children: [
-              // SizedBox(width: 1,),
-              Padding(
-                padding: const EdgeInsets.all(7.0),
-                child: Text(
-                  "${userData[userType][1]}",
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          TextField(
-          controller: twoController,
-          decoration: InputDecoration(
-            label: Text("Enter data"),
-            prefixIcon: Icon(Icons.email_outlined),
-
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.grey, width: 1.5),
-            ),
-
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.blue, width: 3),
-            ),
-          ),
-        ),
+        // Dynamic Field 1
+        _buildLabel(fields[0]),
+        _buildTextField(oneController, "Enter ${fields[0]}", Icons.data_saver_on_sharp),
         const SizedBox(height: 10),
 
-        if(userType!="Patient" && fields.length>2) 
-        Column(
-          children: [
-            Row(
-            children: [
-              // SizedBox(width: 1,),
-              Padding(
-                padding: const EdgeInsets.all(7.0),
-                child: Text(
-                  "${userData[userType][2]}",
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          TextField(
-            controller: threeController,
-            decoration: InputDecoration(
-            label: Text("Enter data"),
-            prefixIcon: Icon(Icons.email_outlined),
+        // Dynamic Field 2
+        _buildLabel(fields[1]),
+        _buildTextField(twoController, "Enter ${fields[1]}", Icons.info_outline),
+        const SizedBox(height: 10),
 
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.grey, width: 1.5),
-            ),
-
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.blue, width: 3),
-            ),
-            ),
-          ),
-                const SizedBox(height: 10),
-          ],
-        )
+        // Dynamic Field 3 (Conditional)
+        if (fields.length > 2) ...[
+          _buildLabel(fields[2]),
+          _buildTextField(threeController, "Enter ${fields[2]}", Icons.more_horiz),
+          const SizedBox(height: 10),
+        ],
       ],
-    );            
+    );
+  }
+
+  // Helper to keep the build method clean
+  Widget _buildLabel(String text) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 4.0),
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.blueGrey),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String hint, IconData icon, {bool isPassword = false}) {
+    return TextField(
+      controller: controller,
+      obscureText: isPassword ? hide : false,
+      decoration: InputDecoration(
+        hintText: hint,
+        prefixIcon: Icon(icon),
+        suffixIcon: isPassword 
+          ? IconButton(
+              icon: Icon(hide ? Icons.visibility_off : Icons.visibility),
+              onPressed: () => setState(() => hide = !hide),
+            ) 
+          : null,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Colors.grey, width: 1.5),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Colors.blue, width: 3),
+        ),
+      ),
+    );
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
+    final UserType selectedRole = Get.arguments ?? UserType.patient;
+
     return Scaffold(
-      body: Expanded(
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(25.0),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                // App Icon
+                Center(
                   child: Container(
                     width: 100,
                     height: 100,
-                    decoration: BoxDecoration(
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                    child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Image.asset("assets/images/appIcon.png", fit: BoxFit.cover,),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  "Create Account",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  "Start Your Path To Wellness Today",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  children: [
-                    // SizedBox(width: 1,),
-                    Padding(
-                      padding: const EdgeInsets.all(7.0),
-                      child: const Text(
-                        "Full Name",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueGrey,
-                        ),
+                      child: Image.asset("assets/images/appIcon.png", 
+                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.apps, size: 80), 
+                        fit: BoxFit.cover,
                       ),
                     ),
-                  ],
-                ),
-                TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    label: Text("Enter your name"),
-                    prefixIcon: Icon(Icons.email_outlined),
-            
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-            
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.grey, width: 1.5),
-                    ),
-            
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.blue, width: 3),
-                    ),
                   ),
                 ),
+                const SizedBox(height: 10),
+                const Text("Create Account", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                const Text("Start Your Path To Wellness Today", style: TextStyle(fontSize: 16)),
+                const SizedBox(height: 30),
+
+                // Static Fields
+                _buildLabel("Full Name"),
+                _buildTextField(nameController, "Enter your name", Icons.person_outline),
                 const SizedBox(height: 10),
 
-                userTypeField(userType: "Consultant"),
-                Row(
-                  children: [
-                    // SizedBox(width: 1,),
-                    Padding(
-                      padding: const EdgeInsets.all(7.0),
-                      child: const Text(
-                        "Email Address",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueGrey,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-            
-                TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    label: Text("name@example.com"),
-                    prefixIcon: Icon(Icons.email_outlined),
-            
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-            
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.grey, width: 1.5),
-                    ),
-            
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.blue, width: 3),
-                    ),
-                  ),
-                ),
-            
+                // Dynamic Fields based on Role
+                userTypeField(userType: selectedRole),
+
+                _buildLabel("Email Address"),
+                _buildTextField(emailController, "name@example.com", Icons.email_outlined),
                 const SizedBox(height: 10),
-                Row(
-                  children: [
-                    // SizedBox(width: 1,),
-                    Padding(
-                      padding: const EdgeInsets.all(7.0),
-                      child: const Text(
-                        "Password",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueGrey,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                TextField(
-                  obscureText: hide,
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                    label: Text("Enter your password"),
-                    prefixIcon: Icon(Icons.lock_outline_sharp),
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          hide = !hide;
-                        });
-                      },
-                      child: Icon(Icons.remove_red_eye_outlined),
-                    ),
-            
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-            
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.grey, width: 1.5),
-                    ),
-            
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.blue, width: 3),
-                    ),
-                  ),
-                ),
-            
+
+                _buildLabel("Password"),
+                _buildTextField(passwordController, "Enter your password", Icons.lock_outline_sharp, isPassword: true),
                 
-                SizedBox(height: 50),
-                // Spacer(),
+                const SizedBox(height: 40),
+
+                // Sign Up Button
                 ElevatedButton(
-                  style: ButtonStyle(
-                    minimumSize: WidgetStateProperty.all(Size(350, 60)),
-                    elevation: WidgetStateProperty.resolveWith<double>((states){
-                      if (states.contains(WidgetState.pressed)) {
-                        return 2.0; // Sinks when pressed
-                      }
-                      if (states.contains(WidgetState.hovered)) {
-                        return 8.0; // Rises when hovered
-                      }
-                      return 5.0; // Default elevation
-                    }),
-                    backgroundColor: WidgetStateColor.resolveWith((states) {
-                      if (states.contains(WidgetState.pressed)) return Colors.deepPurpleAccent.shade400;
-                      if (states.contains(WidgetState.hovered)) return Colors.deepPurpleAccent.shade100;
-                      return Colors.deepPurpleAccent;
-                    }),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 60),
+                    backgroundColor: Colors.deepPurpleAccent,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    elevation: 5,
                   ),
                   onPressed: () {
-                    
+                    // Registration Logic
                   },
-                  child: Text(
+                  child: const Text(
                     "CREATE ACCOUNT",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                 ),
-                // Spacer(),
-                SizedBox(height: 10,),
+
+                const SizedBox(height: 20),
+                
+                // Login Redirect
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Already have an account?",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                      textAlign: TextAlign.end,
-                    ),
-                    SizedBox(width: 10),
+                    const Text("Already have an account?", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+                    const SizedBox(width: 8),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushReplacement(
-                          PageRouteBuilder(
-                            transitionDuration: const Duration(milliseconds: 500),
-                            reverseTransitionDuration: const Duration( milliseconds: 500),
-                            pageBuilder: (context, animation, secondaryAnimation) => TestScreen(),
-                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              return SharedAxisTransition(animation: animation, secondaryAnimation: secondaryAnimation, transitionType: SharedAxisTransitionType.horizontal, child: child,);
-                            },
-                          ),
+                        Get.off(
+                          () => const TestScreen(),
+                          transition: Transition.fadeIn,
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         "Login",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.deepPurpleAccent,
-                        ),
-                        textAlign: TextAlign.end,
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.deepPurpleAccent),
                       ),
                     ),
                   ],

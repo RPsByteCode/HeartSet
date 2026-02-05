@@ -106,29 +106,32 @@ class IndividualScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFF),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
+      body: Padding(
+        padding: const EdgeInsets.all(25.0),
         child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal, // Allow horizontal scroll on very small screens
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: minTableWidth),
-            child: Container(
-              width: screenWidth > 600 ? screenWidth : 600, // Fixed width for mobile, fluid for tablet
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTableHeader(),
-                  const SizedBox(height: 10),
-                  _buildPatientRow("Marcus Aurelius", "ACTIVE", "Oct 22, 2023", Colors.red, true),
-                  _buildPatientRow("Elena Gilbert", "ACTIVE", "Oct 19, 2023", Colors.amber, true),
-                  _buildPatientRow("David Goggins", "ON BREAK", "Sep 12, 2023", Colors.green, false),
-                  const SizedBox(height: 40),
-                  const Center(
-                    child: Text("END OF DIRECTORY",
-                        style: TextStyle(color: Colors.grey, fontSize: 12, letterSpacing: 1.2)),
-                  ),
-                ],
+          scrollDirection: Axis.vertical,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal, // Allow horizontal scroll on very small screens
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minWidth: minTableWidth),
+              child: Container(
+                width: screenWidth > 600 ? screenWidth : 600, // Fixed width for mobile, fluid for tablet
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildTableHeader(),
+                    const SizedBox(height: 10),
+                    _buildPatientRow("Marcus Aurelius", "ACTIVE", "Oct 22, 2023", Colors.red, true),
+                    _buildPatientRow("Elena Gilbert", "ACTIVE", "Oct 19, 2023", Colors.amber, true),
+                    _buildPatientRow("David Goggins", "ON BREAK", "Sep 12, 2023", Colors.green, false),
+                    const SizedBox(height: 40),
+                    const Center(
+                      child: Text("END OF DIRECTORY",
+                          style: TextStyle(color: Colors.grey, fontSize: 12, letterSpacing: 1.2)),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

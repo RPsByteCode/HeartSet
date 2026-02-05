@@ -5,29 +5,32 @@ class GroupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFF8FAFF),
-      child: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          _buildCohortCard(
-            "Anxiety Support A",
-            "12 Active Members",
-            82,
-            Colors.red,
-            "HIGH RISK",
-            Icons.group_outlined,
-          ),
-          const SizedBox(height: 20),
-          _buildCohortCard(
-            "Post-Trauma Cohort",
-            "8 Active Members",
-            45,
-            Colors.amber,
-            "ELEVATED",
-            Icons.psychology_outlined,
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Container(
+        color: const Color(0xFFF8FAFF),
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
+            _buildCohortCard(
+              "Anxiety Support A",
+              "12 Active Members",
+              82,
+              Colors.red,
+              "HIGH RISK",
+              Icons.group_outlined,
+            ),
+            const SizedBox(height: 20),
+            _buildCohortCard(
+              "Post-Trauma Cohort",
+              "8 Active Members",
+              45,
+              Colors.amber,
+              "ELEVATED",
+              Icons.psychology_outlined,
+            ),
+          ],
+        ),
       ),
     );
   }

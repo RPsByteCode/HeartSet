@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:mhc/view/patient_app/home_screen.dart';
 import 'package:mhc/view/patient_app/dairy_screen.dart';
+import 'package:mhc/view/patient_app/support_screen.dart';
 
 
 class PatientNavBar extends StatefulWidget {
@@ -22,20 +23,19 @@ class _NavBarState extends State<PatientNavBar> {
         return HomeScreen();
       case 1:
         return DiaryScreen();
-      // case 2:
-      //   return ProductPage();
-      // case 3:
-      //   return DoctorPage();
-      // case 4:
-      //   return LearnFeed();
+      case 2:
+        return SupportScreen();
+      
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
+    return Scaffold(
+      body: pages(currentPage),
+      bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
-        selectedItemColor: Colors.pink,
+        selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
         onTap: (value) {
           currentPage = value;
@@ -47,15 +47,16 @@ class _NavBarState extends State<PatientNavBar> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Individual",
+            icon: Icon(Icons.book_outlined),
+            label: "Dairy",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            label: "Group",
+            icon: Icon(Icons.warning_amber),
+            label: "Support",
           ),
         ],
       
+    ),
     );
   }
 }

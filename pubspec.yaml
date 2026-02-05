@@ -10,11 +10,32 @@ dependencies:
   flutter:
     sdk: flutter
   animated_custom_appbar: ^1.0.4
+  animations: ^2.1.1
+  firebase_core: ^4.4.0
+  google_fonts: ^8.0.0
+  lottie: ^3.3.2
+  cloud_firestore: ^6.1.2
+  font_awesome_flutter: ^10.12.0
+  intl: ^0.20.2
+  get: ^4.7.3
+  sqflite: ^2.4.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
+  assets:
+   - assets/images/
+   - assets/images/appIcon1.png
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/appIcon1.png"
+  # For Android Adaptive Icons (Mandatory for clarity/modern look)
+  adaptive_icon_background: "#ffffff" 
+  adaptive_icon_foreground: "assets/images/appIcon1.png"

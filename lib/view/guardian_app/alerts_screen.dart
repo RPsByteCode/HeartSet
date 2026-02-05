@@ -60,7 +60,6 @@ class EmergencyAlertScreen extends StatelessWidget {
               ),
             ),
           ),
-          _buildBottomNav(),
         ],
       ),
     );
@@ -169,30 +168,6 @@ class EmergencyAlertScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNav() {
-    return Container(
-      color: Colors.black,
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _navItem(Icons.visibility_outlined, "WATCH", false),
-          _navItem(Icons.notifications, "ALERTS", true),
-        ],
-      ),
-    );
-  }
-
-  Widget _navItem(IconData icon, String label, bool isActive) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: isActive ? const Color(0xFFD32F2F) : Colors.grey),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: isActive ? const Color(0xFFD32F2F) : Colors.grey)),
-      ],
-    );
-  }
 }
 
 class MapGridPainter extends CustomPainter {

@@ -1,5 +1,8 @@
 import 'package:animated_custom_appbar/animated_custom_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:lottie/lottie.dart';
+import 'package:mhc/widgets/bottomSheet.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,6 +13,34 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String selectedMood = "";
+  bool catClicked =false;
+  String gifVal="assets/catGif/Okay.gif";
+
+  String moodGif({required String moodName }){
+
+    switch(moodName){
+      case "HAPPY":
+        return "assets/catGif/Happy.gif";
+      case "SAD":
+        return "assets/catGif/Sad.gif";
+      case "ANXIOUS":
+        return "assets/catGif/Anxious.gif";
+      case "CALM":
+        return "assets/catGif/Calm.gif";
+      case "OKAY":
+        return "assets/catGif/Okay.gif";
+      case "Feed":
+        return "assets/catGif/Feed.gif";
+      case "Hungry":
+        return "assets/catGif/Hungry.gif";
+      case "Listen":
+        return "assets/catGif/Listen.gif";
+      case "Gift":
+        return "assets/catGif/Gift.gif";
+      default:
+        return "";
+    }
+  }
 
   Widget buildMoodItem({required String moodName, required IconData iconName, required Color color}) {
     bool isSelected = selectedMood == moodName;
@@ -18,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: () {
         setState(() {
           selectedMood = moodName;
+          gifVal = moodGif(moodName: moodName);
         });
       },
       child: AnimatedContainer(
@@ -67,10 +99,18 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 spacing: 10,
                 children: [
-                  ElevatedButton(onPressed: () {}, child: const Text("Joyful")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Excited")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Productive")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Social")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Joyful", context: context);
+                  }, child: const Text("Joyful")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Excited", context: context);
+                  }, child: const Text("Excited")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Productive", context: context);
+                  }, child: const Text("Productive")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Social", context: context);
+                  }, child: const Text("Social")),
                 ],
               ),
             ),
@@ -88,10 +128,18 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 spacing: 10,
                 children: [
-                  ElevatedButton(onPressed: () {}, child: const Text("Lonely")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Tired")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Grief")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Low Energy")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Lonely", context: context);
+                  }, child: const Text("Lonely")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Tired", context: context);
+                  }, child: const Text("Tired")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Grief", context: context);
+                  }, child: const Text("Grief")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Low Energy", context: context);
+                  }, child: const Text("Low Energy")),
                 ],
               ),
             ),
@@ -110,10 +158,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 spacing: 10,
                 // runSpacing: 12,
                 children: [
-                  ElevatedButton(onPressed: () {}, child: const Text("Restless")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Panicked")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Streesed")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Worried")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Restless", context: context);
+                  }, child: const Text("Restless")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Panicked", context: context);
+
+                  }, child: const Text("Panicked")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Streesed", context: context);
+
+                  }, child: const Text("Streesed")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Worried", context: context);
+
+                  }, child: const Text("Worried")),
                 ],
               ),
             ),
@@ -131,10 +190,18 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 spacing: 10,
                 children: [
-                  ElevatedButton(onPressed: () {}, child: const Text("Peaceful")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Mindful")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Content")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Rested")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Peaceful", context: context);
+                  }, child: const Text("Peaceful")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Mindful", context: context);
+                  }, child: const Text("Mindful")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Content", context: context);
+                  }, child: const Text("Content")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Rested", context: context);
+                  }, child: const Text("Rested")),
                 ],
               ),
             ),
@@ -152,10 +219,18 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 spacing: 10,
                 children: [
-                  ElevatedButton(onPressed: () {}, child: const Text("Bored")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Uncertain")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Neutral")),
-                  ElevatedButton(onPressed: () {}, child: const Text("Quiet")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Bored", context: context);
+                  }, child: const Text("Bored")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Uncertain", context: context);
+                  }, child: const Text("Uncertain")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Neutral", context: context);
+                  }, child: const Text("Neutral")),
+                  ElevatedButton(onPressed: () {
+                     ModalBottomSheet.callSheet(title: "Quiet", context: context);
+                  }, child: const Text("Quiet")),
                 ],
               ),
             ),
@@ -193,12 +268,19 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.white,
               child: Column(
                 children: [
-                  Container(
-                    height: 250,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                  GestureDetector(
+                    onTap: ()=>setState(() {
+                      catClicked=!catClicked;
+                    }),
+                    child: Container(
+                      height: 350,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Image.asset(gifVal, fit: BoxFit.fill, ),
                     ),
-                    child: Image.asset("name"),
                   ),
                   const SizedBox(height: 20),
                   const Row(
@@ -279,10 +361,15 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        onPressed: () {},
+        onPressed: () {
+          
+        },
         shape: const CircleBorder(),
         child: const Icon(Icons.warning_amber, size: 30, color: Colors.white),
       ),
     );
   }
+
+
+  
 }

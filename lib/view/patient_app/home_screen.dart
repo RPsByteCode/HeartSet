@@ -37,6 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
         return "assets/catGif/Listen.gif";
       case "Gift":
         return "assets/catGif/Gift.gif";
+      case "Pet":
+        return "assets/catGif/Pet.gif";
       default:
         return "";
     }

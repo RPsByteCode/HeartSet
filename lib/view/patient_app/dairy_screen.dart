@@ -6,13 +6,15 @@ import 'package:mhc/widgets/bottomSheet.dart';
 class DiaryScreen extends StatefulWidget {
   const DiaryScreen({super.key});
 
+  static get BTM_list => null;
+
   @override
   State<DiaryScreen> createState() => _DiaryScreenState();
 }
 
 class _DiaryScreenState extends State<DiaryScreen> {
   bool isLocked = true;
-  List<DiaryModal> BTM_list = [];
+  static List<DiaryModal> BTM_list = [];
 
   void _handleSubmission({required bool isEdit, DiaryModal? oldObj, required DiaryModal newObj}) {
     setState(() {

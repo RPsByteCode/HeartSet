@@ -32,7 +32,7 @@ class ModalBottomSheet {
             children: [
               Center(
                 child: Text(
-                  isEdit ? "Edit Task" : "Create Task",
+                  isEdit ? "Express!!" : "Add Note",
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -103,7 +103,10 @@ class ModalBottomSheet {
   static void callSheet({required String title, required BuildContext context}){
 
     DiaryModal entry = DiaryModal(title: title, date: DateFormat('dd MMMM yyyy').format(DateTime.now()), description: '');
-    show(context: context, isEdit: true, onSumbit: (DiaryModal p1) {
+    show(
+      context: context, 
+      isEdit: true, 
+      onSumbit: (DiaryModal p1) {
         p1.date = DateTime.now() as String;
         p1.title = title;
         p1.description = "";

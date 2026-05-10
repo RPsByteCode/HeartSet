@@ -1,10 +1,7 @@
 import 'package:animated_custom_appbar/animated_custom_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:mhc/modal/diary_modal/diary_modal.dart';
-import 'package:mhc/modal/diary_modal/diary_notes.dart';
-import 'package:mhc/view/patient_app/dairy_screen.dart';
-// import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:mhc/widgets/bottomSheet.dart';
+import 'package:mhc/widgets/virtual_pet/virtual_pet.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,48 +12,33 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String selectedMood = "";
-  bool catClicked = false;
-  String gifVal = "assets/catGif/Entry.gif";
+  PetState _petState = PetState.idle;
 
-  String moodGif({required String moodName}) {
+  // ─── Map mood name → PetState ─────────────────────────────────────────────
+  PetState _moodToPetState(String moodName) {
     switch (moodName) {
-      case "HAPPY":
-        return "assets/catGif/Happy.gif";
-      case "SAD":
-        return "assets/catGif/Sad.gif";
-      case "ANXIOUS":
-        return "assets/catGif/Anxious.gif";
-      case "CALM":
-        return "assets/catGif/Calm.gif";
-      case "OKAY":
-        return "assets/catGif/Okay.gif";
-      case "Feed":
-        return "assets/catGif/Feed.gif";
-      case "Hungry":
-        return "assets/catGif/Hungry.gif";
-      case "Listen":
-        return "assets/catGif/Listen.gif";
-      case "Gift":
-        return "assets/catGif/Gift.gif";
-      case "Pet":
-        return "assets/catGif/Pet.gif";
-      default:
-        return "";
+      case "HAPPY":    return PetState.happy;
+      case "SAD":      return PetState.sad;
+      case "ANXIOUS":  return PetState.anxious;
+      case "CALM":     return PetState.calm;
+      case "OKAY":     return PetState.okay;
+      default:         return PetState.idle;
     }
   }
 
-  Widget buildMoodItem({
+  // ─── Mood selector item ───────────────────────────────────────────────────
+  Widget _buildMoodItem({
     required String moodName,
     required IconData iconName,
     required Color color,
   }) {
-    bool isSelected = selectedMood == moodName;
+    final isSelected = selectedMood == moodName;
 
     return GestureDetector(
       onTap: () {
         setState(() {
           selectedMood = moodName;
-          gifVal = moodGif(moodName: moodName);
+          _petState = _moodToPetState(moodName);
         });
       },
       child: AnimatedContainer(
@@ -72,11 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Column(
           children: [
-            Icon(
-              iconName,
-              size: isSelected ? 45 : 35,
-              color: isSelected ? color : Colors.blueGrey,
-            ),
+            Icon(iconName, size: isSelected ? 45 : 35, color: isSelected ? color : Colors.blueGrey),
             const SizedBox(height: 5),
             Text(
               moodName,
@@ -92,277 +70,52 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // ─── Mood tag rows ────────────────────────────────────────────────────────
   Widget _buildMoodDetailWidget(String mood) {
-    switch (mood) {
-      case "HAPPY":
-        return Column(
-          children: [
-            const Text("SELECT TAGS THAT DESCRIBE YOUR HAPPY MOOD:"),
-            const SizedBox(height: 20),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.all(7),
-              child: Row(
-                spacing: 10,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Joyful",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Joyful"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Excited",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Excited"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Productive",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Productive"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Social",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Social"),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      case "SAD":
-        return Column(
-          children: [
-            const Text("SELECT TAGS THAT DESCRIBE YOUR SAD MOOD:"),
-            const SizedBox(height: 20),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.all(7),
-              child: Row(
-                spacing: 10,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Lonely",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Lonely"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Tired",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Tired"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Grief",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Grief"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Low Energy",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Low Energy"),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      case "ANXIOUS":
-        return Column(
-          children: [
-            const Text("SELECT TAGS THAT DESCRIBE YOUR ANXIOUS MOOD:"),
-            const SizedBox(height: 20),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.all(7),
-              child: Row(
-                spacing: 10,
-                // runSpacing: 12,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Restless",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Restless"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Panicked",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Panicked"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Streesed",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Streesed"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Worried",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Worried"),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      case "CALM":
-        return Column(
-          children: [
-            const Text("SELECT TAGS THAT DESCRIBE YOUR CALM MOOD:"),
-            const SizedBox(height: 20),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.all(7),
-              child: Row(
-                spacing: 10,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Peaceful",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Peaceful"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Mindful",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Mindful"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Content",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Content"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Rested",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Rested"),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      case "OKAY":
-        return Column(
-          children: [
-            const Text("SELECT TAGS THAT DESCRIBE YOUR OKAY MOOD:"),
-            const SizedBox(height: 20),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.all(7),
-              child: Row(
-                spacing: 10,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Bored",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Bored"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Uncertain",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Uncertain"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Neutral",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Neutral"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ModalBottomSheet.callSheet(
-                        title: "Quiet",
-                        context: context,
-                      );
-                    },
-                    child: const Text("Quiet"),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      default:
-        return const SizedBox.shrink();
-    }
+    final Map<String, List<String>> tags = {
+      "HAPPY":   ["Joyful", "Excited", "Productive", "Social"],
+      "SAD":     ["Lonely", "Tired", "Grief", "Low Energy"],
+      "ANXIOUS": ["Restless", "Panicked", "Stressed", "Worried"],
+      "CALM":    ["Peaceful", "Mindful", "Content", "Rested"],
+      "OKAY":    ["Bored", "Uncertain", "Neutral", "Quiet"],
+    };
+
+    final list = tags[mood];
+    if (list == null) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "SELECT TAGS THAT DESCRIBE YOUR $mood MOOD:",
+          style: const TextStyle(fontSize: 12, color: Colors.grey, letterSpacing: 0.5),
+        ),
+        const SizedBox(height: 14),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            spacing: 10,
+            children: list
+                .map((tag) => ElevatedButton(
+                      onPressed: () => ModalBottomSheet.callSheet(title: tag, context: context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: const Color(0xFF7B32FF),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: const BorderSide(color: Color(0xFF7B32FF), width: 1),
+                        ),
+                      ),
+                      child: Text(tag),
+                    ))
+                .toList(),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -374,142 +127,188 @@ class _HomeScreenState extends State<HomeScreen> {
         maxHeight: 120,
         centerWidget: RichText(
           text: const TextSpan(
-            text: "Good Morning, User!!",
-            style: TextStyle(color: Colors.black, fontSize: 25),
+            text: "Good Morning, User!",
+            style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold),
             children: [
               TextSpan(
                 text: "\nWe're so glad you're here.",
-                style: TextStyle(color: Colors.grey, fontSize: 20),
+                style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.normal),
               ),
             ],
           ),
         ),
         children: [
+          // ── Virtual Pet Card ──────────────────────────────────────────────
           Padding(
-            padding: const EdgeInsets.all(7.0),
+            padding: const EdgeInsets.all(12.0),
             child: Card(
-              elevation: 7,
+              elevation: 6,
               color: Colors.white,
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () => setState(() {
-                      catClicked = !catClicked;
-                    }),
-                    child: Container(
-                      height: 350,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Image.asset(gifVal, fit: BoxFit.fill),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: ()=> setState(() {
-                          gifVal ="assets/catGif/Listen.gif";
-                        }) ,
-                        child: CircleAvatar(
-                          child: Icon(Icons.mic_none_outlined),
-                        ),
-                      ),
-                      SizedBox(width: 50),
-                      GestureDetector(
-                        onTap: () => setState(() {
-                          gifVal = "assets/catGif/Gift.gif";
-                        }),
-                        child: CircleAvatar(child: Icon(Icons.card_giftcard)),
-                      ),
-                      SizedBox(width: 50),
-                      GestureDetector(
-                        onTap: () => setState(() {
-                          gifVal = "assets/catGif/Pet.gif";
-                        }),
-                        child: CircleAvatar(child: Icon(Icons.pets)),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "Tap to tell me something",
-                    style: TextStyle(fontSize: 20, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(7.0),
-            child: Card(
-              elevation: 7,
-              color: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
               child: Padding(
-                padding: const EdgeInsets.all(7.0),
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                 child: Column(
                   children: [
-                    const Text(
-                      "How are you feeling today ?",
-                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    // The animated cat — replaces all 11 GIFs
+                    VirtualPetWidget(
+                      state: _petState,
+                      size: 260,
+                      onTap: () {
+                        // Tap the cat → pet interaction
+                        setState(() => _petState = PetState.pet);
+                        Future.delayed(const Duration(seconds: 2), () {
+                          if (mounted) {
+                            setState(() => _petState = _moodToPetState(selectedMood));
+                          }
+                        });
+                      },
                     ),
-                    const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildMoodItem(
-                            moodName: "HAPPY",
-                            iconName: Icons.sentiment_satisfied_alt_outlined,
-                            color: Colors.orange,
-                          ),
-                          buildMoodItem(
-                            moodName: "SAD",
-                            iconName: Icons.sentiment_dissatisfied,
-                            color: Colors.blue,
-                          ),
-                          buildMoodItem(
-                            moodName: "ANXIOUS",
-                            iconName: Icons.warning_amber_outlined,
-                            color: Colors.red,
-                          ),
-                          buildMoodItem(
-                            moodName: "CALM",
-                            iconName: Icons.air,
-                            color: Colors.green,
-                          ),
-                          buildMoodItem(
-                            moodName: "OKAY",
-                            iconName: Icons.sentiment_neutral,
-                            color: Colors.amber,
-                          ),
-                        ],
+
+                    const SizedBox(height: 16),
+
+                    // Interaction buttons
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildPetActionButton(
+                          icon: Icons.mic_none_outlined,
+                          label: "Talk",
+                          onTap: () {
+                            setState(() => _petState = PetState.listen);
+                            Future.delayed(const Duration(seconds: 3), () {
+                              if (mounted) setState(() => _petState = _moodToPetState(selectedMood));
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 32),
+                        _buildPetActionButton(
+                          icon: Icons.card_giftcard,
+                          label: "Gift",
+                          onTap: () {
+                            setState(() => _petState = PetState.gift);
+                            Future.delayed(const Duration(seconds: 2), () {
+                              if (mounted) setState(() => _petState = _moodToPetState(selectedMood));
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 32),
+                        _buildPetActionButton(
+                          icon: Icons.pets,
+                          label: "Pet",
+                          onTap: () {
+                            setState(() => _petState = PetState.pet);
+                            Future.delayed(const Duration(seconds: 2), () {
+                              if (mounted) setState(() => _petState = _moodToPetState(selectedMood));
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 12),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 400),
+                      child: Text(
+                        _petStateLabel(_petState),
+                        key: ValueKey(_petState),
+                        style: const TextStyle(fontSize: 14, color: Colors.grey, fontStyle: FontStyle.italic),
                       ),
-                    ),
-                    if (selectedMood.isNotEmpty) const Divider(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: _buildMoodDetailWidget(selectedMood),
                     ),
                   ],
                 ),
               ),
             ),
           ),
+
+          // ── Mood Check-In Card ────────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
+            child: Card(
+              elevation: 6,
+              color: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "How are you feeling today?",
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1A1F2C)),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildMoodItem(moodName: "HAPPY",   iconName: Icons.sentiment_satisfied_alt_outlined, color: Colors.orange),
+                        _buildMoodItem(moodName: "SAD",     iconName: Icons.sentiment_dissatisfied,           color: Colors.blue),
+                        _buildMoodItem(moodName: "ANXIOUS", iconName: Icons.warning_amber_outlined,           color: Colors.red),
+                        _buildMoodItem(moodName: "CALM",    iconName: Icons.air,                              color: Colors.green),
+                        _buildMoodItem(moodName: "OKAY",    iconName: Icons.sentiment_neutral,                color: Colors.amber),
+                      ],
+                    ),
+                    if (selectedMood.isNotEmpty) ...[
+                      const Divider(height: 24),
+                      _buildMoodDetailWidget(selectedMood),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 100),
         ],
       ),
+
+      // SOS floating button
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
         onPressed: () {
-          
+          // TODO: wire SOS emergency flow
         },
         shape: const CircleBorder(),
         child: const Icon(Icons.warning_amber, size: 30, color: Colors.white),
       ),
     );
   }
-    
+
+  // ─── Helper: pet action button ────────────────────────────────────────────
+  Widget _buildPetActionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 24,
+            backgroundColor: const Color(0xFFF0F4FF),
+            child: Icon(icon, color: const Color(0xFF7B32FF)),
+          ),
+          const SizedBox(height: 4),
+          Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+        ],
+      ),
+    );
+  }
+
+  // ─── Helper: label shown below the cat ───────────────────────────────────
+  String _petStateLabel(PetState state) {
+    switch (state) {
+      case PetState.idle:    return "Tap to interact with me!";
+      case PetState.happy:   return "I'm so happy today! 🎉";
+      case PetState.sad:     return "I'm here with you 💙";
+      case PetState.anxious: return "Let's breathe together...";
+      case PetState.calm:    return "Feeling peaceful 🌿";
+      case PetState.okay:    return "Just taking it one step at a time.";
+      case PetState.listen:  return "Listening closely...";
+      case PetState.gift:    return "A treat for you! 🎁";
+      case PetState.pet:     return "That feels nice~ 😊";
+      case PetState.feed:    return "Yummy! Thank you!";
+      case PetState.hungry:  return "I could use a snack...";
+    }
+  }
 }

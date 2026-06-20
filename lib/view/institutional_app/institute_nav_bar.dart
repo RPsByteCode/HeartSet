@@ -1,59 +1,42 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:mhc/view/institutional_app/cohort_orchestrator_screen.dart';
+import 'package:mhc/view/institutional_app/institute_home_screen.dart';
+import 'package:mhc/view/consultant_app/group_screens/group_list.dart';
 
-
-
-
-class PatientNavBar extends StatefulWidget {
-
-  const PatientNavBar({super.key});
+class InstituteNavBar extends StatefulWidget {
+  const InstituteNavBar({super.key});
 
   @override
-  State<PatientNavBar> createState() => _NavBarState();
+  State<InstituteNavBar> createState() => _InstituteNavBarState();
 }
 
-class _NavBarState extends State<PatientNavBar> {
-  int currentPage = 0;
+class _InstituteNavBarState extends State<InstituteNavBar> {
+  int _currentPage = 0;
 
-  pages(int currentPage) {
-    switch (currentPage) {
-      case 0:
-        return ();
-      case 1:
-        return ();
-      case 2:
-        return ();
-      
+  Widget _page(int index) {
+    switch (index) {
+      case 0: return const InstituteHomeScreen();
+      case 1: return const CohortOrchestratorScreen();
+      case 2: return const GroupsListScreen();
+      default: return const InstituteHomeScreen();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages(currentPage),
+      body: _page(_currentPage),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentPage,
-        selectedItemColor: Colors.blue,
+        currentIndex: _currentPage,
+        selectedItemColor: const Color(0xFF006064),
         unselectedItemColor: Colors.grey,
-        onTap: (value) {
-          currentPage = value;
-          setState(() {});
-        },
-        items: [
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.home),
-          //   label: "Home",
-          // ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.book_outlined),
-          //   label: "Dairy",
-          // ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.warning_amber),
-          //   label: "Support",
-          // ),
-        ],),
+        onTap: (v) => setState(() => _currentPage = v),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard_outlined), label: 'Dashboard'),
+          BottomNavigationBarItem(icon: Icon(Icons.people_outline), label: 'Cohorts'),
+          BottomNavigationBarItem(icon: Icon(Icons.group_outlined), label: 'Groups'),
+        ],
+      ),
     );
   }
 }

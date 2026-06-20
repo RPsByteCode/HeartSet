@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mhc/widgets/sos_overlay.dart';
 
 class SupportScreen extends StatefulWidget {
   const SupportScreen({super.key});
@@ -66,7 +67,7 @@ class _SupportScreenState extends State<SupportScreen> {
             right: 20,
             child: FloatingActionButton(
               backgroundColor: Colors.red,
-              onPressed: () {},
+              onPressed: () => showSosOverlay(context),
               child: const Icon(Icons.report_problem_outlined, color: Colors.white),
             ),
           )
@@ -92,7 +93,7 @@ class _SupportScreenState extends State<SupportScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10)],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 10)],
       ),
       child: Column(
         children: safetyTeam.map((member) {
@@ -105,7 +106,7 @@ class _SupportScreenState extends State<SupportScreen> {
             subtitle: Text(member['status'], style: const TextStyle(fontSize: 10, letterSpacing: 1)),
             trailing: Switch(
               value: member['isActive'],
-              activeColor: const Color(0xFF7B32FF),
+              activeThumbColor: const Color(0xFF7B32FF),
               onChanged: (val) {},
             ),
           );

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mhc/modal/appointment_db.dart';
 import 'package:mhc/modal/appointments.dart';
 
 
@@ -22,12 +21,15 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   @override
   void initState() {
     super.initState();
+    _loadAppointments();
+  }
 
-    _upcomingAppointments = Future.value([]);
-    _rejectedAppointments = Future.value([]);
-    _pendingAppointments = Future.value([]);
-
-    // refreshAppointmentLists();
+  void _loadAppointments() {
+    setState(() {
+      _upcomingAppointments = AppointmentDB.instance.getByStatus('approved');
+      _rejectedAppointments = AppointmentDB.instance.getByStatus('rejected');
+      _pendingAppointments  = AppointmentDB.instance.getByStatus('pending');
+    });
   }
 
   final List<Color> _colors = [
@@ -74,7 +76,16 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
             ),
           );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Lottie.asset("assets/lottie/noData.json");
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.calendar_today_outlined, size: 60, color: Colors.grey),
+                const SizedBox(height: 12),
+                Text('No appointments here', style: GoogleFonts.poppins(color: Colors.grey)),
+              ],
+            ),
+          );
         } else {
           final appointments = snapshot.data!;
           return ListView.builder(
@@ -180,7 +191,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
               detailRow(icon: FontAwesomeIcons.clock, text: time, color: color),
               const SizedBox(height: 12),
               detailRow(
-                icon: FontAwesomeIcons.clinicMedical,
+                icon: FontAwesomeIcons.houseChimneyMedical,
                 text: typeOfAppointment,
                 color: color,
               ),

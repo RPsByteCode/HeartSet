@@ -1,6 +1,9 @@
 import 'package:animated_custom_appbar/animated_custom_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:mhc/modal/mood_log_db.dart';
+import 'package:mhc/modal/mood_log_modal.dart';
 import 'package:mhc/widgets/bottomSheet.dart';
+import 'package:mhc/widgets/sos_overlay.dart';
 import 'package:mhc/widgets/virtual_pet/virtual_pet.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -40,6 +43,11 @@ class _HomeScreenState extends State<HomeScreen> {
           selectedMood = moodName;
           _petState = _moodToPetState(moodName);
         });
+        // Save mood to local DB
+        MoodLogDB.instance.insertLog(MoodLogModal(
+          mood: moodName,
+          date: DateTime.now().toIso8601String(),
+        ));
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
@@ -99,7 +107,15 @@ class _HomeScreenState extends State<HomeScreen> {
             spacing: 10,
             children: list
                 .map((tag) => ElevatedButton(
-                      onPressed: () => ModalBottomSheet.callSheet(title: tag, context: context),
+                      onPressed: () {
+                        ModalBottomSheet.callSheet(title: tag, context: context);
+                        // Save mood log with the selected sub-tag
+                        MoodLogDB.instance.insertLog(MoodLogModal(
+                          mood: mood,
+                          tag: tag,
+                          date: DateTime.now().toIso8601String(),
+                        ));
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: const Color(0xFF7B32FF),
@@ -264,9 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // SOS floating button
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        onPressed: () {
-          // TODO: wire SOS emergency flow
-        },
+        onPressed: () => showSosOverlay(context),
         shape: const CircleBorder(),
         child: const Icon(Icons.warning_amber, size: 30, color: Colors.white),
       ),

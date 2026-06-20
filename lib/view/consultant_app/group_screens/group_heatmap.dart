@@ -127,7 +127,7 @@ class GroupHeatmapScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CircleAvatar(radius: 18, backgroundColor: statusColor.withOpacity(0.1), child: Icon(Icons.person, color: statusColor, size: 20)),
+          CircleAvatar(radius: 18, backgroundColor: statusColor.withValues(alpha: 0.1), child: Icon(Icons.person, color: statusColor, size: 20)),
           const SizedBox(width: 16),
           Expanded(
             child: Column(

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:mhc/view/consultant_app/consultant_nav_bar.dart';
 import 'package:mhc/view/guardian_app/gaurdian_nav_bar.dart';
@@ -18,15 +16,16 @@ class TestScreen extends StatefulWidget {
 class _NavBarState extends State<TestScreen> {
   int currentPage = 0;
 
-  pages(int currentPage) {
+  Widget pages(int currentPage) {
     switch (currentPage) {
       case 0:
-        return PatientNavBar();
+        return const PatientNavBar();
       case 1:
-        return ConsultantNavBar();
+        return const ConsultantNavBar();
       case 2:
-        return GaurdianNavBar();
-      
+        return const GaurdianNavBar();
+      default:
+        return const PatientNavBar();  
     }
   }
 

@@ -6,36 +6,47 @@ import 'package:mhc/widgets/bottomSheet.dart';
 class DiaryScreen extends StatefulWidget {
   const DiaryScreen({super.key});
 
-  static get BTM_list => null;
-
   @override
   State<DiaryScreen> createState() => _DiaryScreenState();
 }
 
 class _DiaryScreenState extends State<DiaryScreen> {
   bool isLocked = true;
-  static List<DiaryModal> BTM_list = [];
+  List<DiaryModal> _entries = [];
 
-  void _handleSubmission({required bool isEdit, DiaryModal? oldObj, required DiaryModal newObj}) {
-    setState(() {
-      if (isEdit && oldObj != null) {
-        oldObj.title = newObj.title;
-        oldObj.description = newObj.description;
-        oldObj.date = newObj.date;
-        DiaryNotes().updateToDoItem({
-          "title": newObj.title,
-          "description": newObj.description,
-          "date": newObj.date
-        });
-      } else {
-        BTM_list.add(newObj);
-        DiaryNotes().insertToDoItem({
-          "title": newObj.title,
-          "description": newObj.description,
-          "date": newObj.date
-        });
-      }
-    });
+  @override
+  void initState() {
+    super.initState();
+    _loadEntries();
+  }
+
+  // ── Load all entries from SQLite on screen open ───────────────────────────
+  Future<void> _loadEntries() async {
+    final entries = await DiaryNotes.instance.getAllEntries();
+    if (mounted) setState(() => _entries = entries);
+  }
+
+  // ── Handle add / edit submission ──────────────────────────────────────────
+  Future<void> _handleSubmission({
+    required bool isEdit,
+    DiaryModal? oldObj,
+    required DiaryModal newObj,
+  }) async {
+    if (isEdit && oldObj != null) {
+      // Preserve the original id when updating
+      final updated = newObj.copyWith(id: oldObj.id);
+      await DiaryNotes.instance.updateEntry(updated);
+    } else {
+      await DiaryNotes.instance.insertEntry(newObj);
+    }
+    // Reload from DB so list stays in sync
+    await _loadEntries();
+  }
+
+  // ── Delete a single entry ─────────────────────────────────────────────────
+  Future<void> _deleteEntry(DiaryModal entry) async {
+    await DiaryNotes.instance.deleteEntry(entry.id);
+    await _loadEntries();
   }
 
   @override
@@ -45,35 +56,35 @@ class _DiaryScreenState extends State<DiaryScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text("YOUR DIARY", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: const Text('YOUR DIARY',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
-            icon: Icon(isLocked ? Icons.lock_outline : Icons.lock_open_rounded, color: Colors.blueAccent),
+            icon: Icon(
+              isLocked ? Icons.lock_outline : Icons.lock_open_rounded,
+              color: const Color(0xFF7B32FF),
+            ),
             onPressed: () => setState(() => isLocked = !isLocked),
           ),
         ],
       ),
       body: Stack(
         children: [
-          ListView( 
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            children: [
-              _buildMainBanner(),
-              const SizedBox(height: 20),
-              ...BTM_list.map((entry) => GestureDetector(
-                onLongPress: () => ModalBottomSheet.show(
-                  context: context,
-                  isEdit: true,
-                  existingEntry: entry,
-                  onSumbit: (newDate) => _handleSubmission(isEdit: true, oldObj: entry, newObj: newDate),
-                ),
-                child: diaryCard(entry),
-              )).toList(),
-              const SizedBox(height: 10),
-              shareConsultantCard(),
-              const SizedBox(height: 100),
-            ],
-          ),
+          ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              children: [
+                _buildMainBanner(),
+                const SizedBox(height: 20),
+                if (_entries.isEmpty)
+                  _buildEmptyState(),
+                ..._entries.map((entry) => _buildDiaryCard(entry)),
+                const SizedBox(height: 10),
+                _buildShareConsultantCard(),
+                const SizedBox(height: 100),
+              ],
+            ),
+
+          // Add entry FAB
           Positioned(
             bottom: 20,
             right: 20,
@@ -82,7 +93,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
               onPressed: () => ModalBottomSheet.show(
                 context: context,
                 isEdit: false,
-                onSumbit: (newDate) => _handleSubmission(isEdit: false, newObj: newDate),
+                onSumbit: (newEntry) => _handleSubmission(isEdit: false, newObj: newEntry),
               ),
               child: const Icon(Icons.add, color: Colors.white),
             ),
@@ -92,10 +103,11 @@ class _DiaryScreenState extends State<DiaryScreen> {
     );
   }
 
+  // ── Privacy banner ────────────────────────────────────────────────────────
   Widget _buildMainBanner() {
     return Container(
       width: double.infinity,
-      height: 180,
+      height: 170,
       decoration: BoxDecoration(
         gradient: const LinearGradient(colors: [Color(0xFF8E86FF), Color(0xFF7B32FF)]),
         borderRadius: BorderRadius.circular(24),
@@ -105,50 +117,124 @@ class _DiaryScreenState extends State<DiaryScreen> {
         children: [
           Icon(isLocked ? Icons.lock_outline : Icons.lock_open, size: 40, color: Colors.white),
           const SizedBox(height: 10),
-          Text(isLocked ? "PRIVACY PROTECTED" : "JOURNAL OPEN",
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+          Text(
+            isLocked ? 'PRIVACY PROTECTED' : 'JOURNAL OPEN',
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, letterSpacing: 1.2),
+          ),
+          if (!isLocked) ...[
+            const SizedBox(height: 6),
+            Text(
+              '${_entries.length} ${_entries.length == 1 ? 'entry' : 'entries'}',
+              style: const TextStyle(color: Colors.white70, fontSize: 12),
+            ),
+          ],
         ],
       ),
     );
   }
 
-  Widget diaryCard(DiaryModal entry) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 15),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
-      ),
+  // ── Empty state ───────────────────────────────────────────────────────────
+  Widget _buildEmptyState() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+        children: const [
+          Icon(Icons.book_outlined, size: 48, color: Colors.grey),
+          SizedBox(height: 12),
+          Text('No entries yet', style: TextStyle(color: Colors.grey, fontSize: 16)),
+          SizedBox(height: 4),
+          Text('Tap + to write your first thought', style: TextStyle(color: Colors.grey, fontSize: 12)),
+        ],
+      ),
+    );
+  }
+
+  // ── Diary card ────────────────────────────────────────────────────────────
+  Widget _buildDiaryCard(DiaryModal entry) {
+    return GestureDetector(
+      // Long-press → edit
+      onLongPress: () => ModalBottomSheet.show(
+        context: context,
+        isEdit: true,
+        existingEntry: entry,
+        onSumbit: (updated) => _handleSubmission(isEdit: true, oldObj: entry, newObj: updated),
+      ),
+      child: Dismissible(
+        key: Key('diary_${entry.id}'),
+        direction: DismissDirection.endToStart,
+        background: Container(
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.only(right: 20),
+          margin: const EdgeInsets.only(bottom: 15),
+          decoration: BoxDecoration(
+            color: Colors.red.shade400,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: const Icon(Icons.delete_outline, color: Colors.white, size: 28),
+        ),
+        confirmDismiss: (_) async {
+          return await showDialog<bool>(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: const Text('Delete Entry'),
+              content: const Text('This entry will be permanently removed.'),
+              actions: [
+                TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+                TextButton(onPressed: () => Navigator.pop(context, true),  child: const Text('Delete', style: TextStyle(color: Colors.red))),
+              ],
+            ),
+          ) ?? false;
+        },
+        onDismissed: (_) => _deleteEntry(entry),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 15),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.notes, color: Colors.purpleAccent),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
-                  Text(entry.title, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                  Text(entry.date, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const Icon(Icons.notes, color: Colors.purpleAccent),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(entry.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                        Text(entry.date, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                      ],
+                    ),
+                  ),
+                  if (isLocked) const Icon(Icons.lock_outline, size: 16, color: Colors.grey),
                 ],
               ),
-              const Spacer(),
-              if (isLocked) const Icon(Icons.lock_outline, size: 16, color: Colors.grey),
+              if (!isLocked && entry.description.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Text(entry.description, style: TextStyle(color: Colors.grey.shade700, height: 1.4)),
+              ],
+              if (isLocked) ...[
+                const SizedBox(height: 10),
+                Center(
+                  child: TextButton(
+                    onPressed: () => setState(() => isLocked = false),
+                    child: const Text('Tap to Unlock', style: TextStyle(color: Color(0xFF7B32FF))),
+                  ),
+                ),
+              ],
             ],
           ),
-          const SizedBox(height: 15),
-          isLocked
-              ? Center(child: TextButton(onPressed: () => setState(() => isLocked = false), child: const Text("Tap to Unlock")))
-              : Text(entry.description, style: TextStyle(color: Colors.grey.shade700)),
-        ],
+        ),
       ),
     );
   }
 
-  Widget shareConsultantCard() {
+  // ── Share with consultant card ────────────────────────────────────────────
+  Widget _buildShareConsultantCard() {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -164,8 +250,8 @@ class _DiaryScreenState extends State<DiaryScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Share with Consultant", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                  Text("SECURE ACCESS LINK", style: TextStyle(color: Colors.grey, fontSize: 10)),
+                  Text('Share with Consultant', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  Text('SECURE ACCESS LINK', style: TextStyle(color: Colors.grey, fontSize: 10)),
                 ],
               ),
             ],
@@ -173,16 +259,20 @@ class _DiaryScreenState extends State<DiaryScreen> {
           const SizedBox(height: 15),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-            decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("A 7 - X 9 2 - K 0", style: TextStyle(color: Colors.white, fontSize: 18, letterSpacing: 2)),
+                Text('A 7 - X 9 2 - K 0',
+                    style: TextStyle(color: Colors.white, fontSize: 18, letterSpacing: 2)),
                 Row(
                   children: [
                     CircleAvatar(radius: 4, backgroundColor: Colors.green),
                     SizedBox(width: 5),
-                    Text("ACTIVE", style: TextStyle(color: Colors.green, fontSize: 10)),
+                    Text('ACTIVE', style: TextStyle(color: Colors.green, fontSize: 10)),
                   ],
                 ),
               ],

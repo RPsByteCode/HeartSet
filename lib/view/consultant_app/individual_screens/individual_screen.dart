@@ -59,7 +59,7 @@
 //               child: Container(
 //                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
 //                 decoration: BoxDecoration(
-//                   color: isActive ? Colors.green.withOpacity(0.1) : Colors.grey.withOpacity(0.1),
+//                   color: isActive ? Colors.green.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.1),
 //                   borderRadius: BorderRadius.circular(6),
 //                 ),
 //                 child: Text(status, style: TextStyle(color: isActive ? Colors.green : Colors.grey, fontSize: 10, fontWeight: FontWeight.bold)),
@@ -189,7 +189,7 @@ class IndividualScreen extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: isActive ? Colors.green.withOpacity(0.1) : Colors.grey.withOpacity(0.1),
+                  color: isActive ? Colors.green.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(status, style: TextStyle(color: isActive ? Colors.green : Colors.grey, fontSize: 10, fontWeight: FontWeight.bold)),

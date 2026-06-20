@@ -1,26 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:mhc/loginScreen.dart';
+import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:mhc/modal/diary_modal/diary_notes.dart';
+import 'package:mhc/view/splash_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp(
-    options: FirebaseOptions(
+
+  // Warm up the diary DB so it's ready before the screen opens
+  await DiaryNotes.instance.database;
+
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
       apiKey: 'AIzaSyD6jC3nrcp1NWjhcQT3BYqoRPq4imDY2XE',
       appId: '1:566189193301:android:d0323f8b2a43edced67cdc',
       messagingSenderId: '566189193301',
       projectId: 'heartset-b0f3f',
     ),
   );
-  runApp(const MainScreen());
+  runApp(const MainApp());
 }
 
-class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(debugShowCheckedModeBanner: false, home: LoginScreen());
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'MHC',
+      theme: ThemeData(
+        colorSchemeSeed: const Color(0xFF7B32FF),
+        useMaterial3: true,
+      ),
+      home: const SplashScreen(),
+    );
   }
 }

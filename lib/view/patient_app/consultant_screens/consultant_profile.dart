@@ -69,10 +69,11 @@ class _DrProfileState extends State<DrProfile> {
         }
       }
     } catch (e) {
-      print("Error fetching doctor verification status: $e");
+      debugPrint("Error fetching doctor verification status: $e");
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

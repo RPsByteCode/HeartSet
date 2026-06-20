@@ -109,7 +109,7 @@ class PatientDetailScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(color: Colors.red.shade50.withOpacity(0.5), borderRadius: BorderRadius.circular(8)),
+            decoration: BoxDecoration(color: Colors.red.shade50.withValues(alpha: 0.5), borderRadius: BorderRadius.circular(8)),
             child: Row(
               children: const [
                 Icon(Icons.error, color: Colors.red, size: 14),
@@ -184,7 +184,7 @@ class PatientDetailScreen extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [const Color(0xFFE0F7F9).withOpacity(0.5), Colors.white],
+          colors: [const Color(0xFFE0F7F9).withValues(alpha: 0.5), Colors.white],
         ),
         borderRadius: BorderRadius.circular(24),
       ),

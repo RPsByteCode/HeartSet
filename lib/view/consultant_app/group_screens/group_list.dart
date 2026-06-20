@@ -94,7 +94,7 @@ class GroupsListScreen extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(color: badgeColor.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
+                decoration: BoxDecoration(color: badgeColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(6)),
                 child: Row(
                   children: [
                     if (badgeColor == Colors.green) const Icon(Icons.check_circle, size: 12, color: Colors.green)

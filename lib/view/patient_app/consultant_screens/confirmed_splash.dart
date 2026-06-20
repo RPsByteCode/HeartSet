@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:mhc/view/institutional_app/institute_nav_bar.dart';
+import 'package:mhc/view/patient_app/patient_nav_bar.dart';
 import 'package:mhc/view/patient_app/consultant_screens/appointment_list.dart';
 
 class ConfirmedSplash extends StatefulWidget {

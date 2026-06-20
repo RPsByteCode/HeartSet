@@ -1,63 +1,44 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:mhc/view/consultant_app/group_screens/group_screen.dart';
 import 'package:mhc/view/consultant_app/home_screen.dart';
 import 'package:mhc/view/consultant_app/individual_screens/individual_screen.dart';
 
-
-
 class ConsultantNavBar extends StatefulWidget {
-
   const ConsultantNavBar({super.key});
 
   @override
-  State<ConsultantNavBar> createState() => _NavBarState();
+  State<ConsultantNavBar> createState() => _ConsultantNavBarState();
 }
 
-class _NavBarState extends State<ConsultantNavBar> {
-  int currentPage = 0;
+class _ConsultantNavBarState extends State<ConsultantNavBar> {
+  int _currentPage = 0;
 
-  pages(int currentPage) {
-    switch (currentPage) {
-      case 0:
-        return ConsultantDashboard();
-      case 1:
-        return IndividualScreen();
-      case 2:
-        return GroupScreen();
-      
+  Widget _page(int index) {
+    switch (index) {
+      case 0: return const ConsultantDashboard();
+      case 1: return const IndividualScreen();
+      case 2: return const GroupScreen();
+      default: return const ConsultantDashboard();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages(currentPage),
-      bottomNavigationBar:  BottomNavigationBar(
-        currentIndex: currentPage,
-        selectedItemColor: Colors.blue,
+      body: _page(_currentPage),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentPage,
+        selectedItemColor: const Color(0xFF006064),
         unselectedItemColor: Colors.grey,
-        onTap: (value) {
-          currentPage = value;
-          setState(() {});
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_2_outlined),
-            label: "Individuals",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group_outlined),
-            label: "Groups",
-          ),
+        backgroundColor: Colors.white,
+        elevation: 8,
+        onTap: (v) => setState(() => _currentPage = v),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), activeIcon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.person_outline), activeIcon: Icon(Icons.person), label: 'Patients'),
+          BottomNavigationBarItem(icon: Icon(Icons.group_outlined), activeIcon: Icon(Icons.group), label: 'Groups'),
         ],
-      
-    ),
+      ),
     );
   }
 }

@@ -147,10 +147,10 @@ class _SelectUserTypeScreenState extends State<SelectUserTypeScreen> {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.white,
-        border: Border.all(color: data.color.withOpacity(0.5), width: 3),
+        border: Border.all(color: data.color.withValues(alpha: 0.5), width: 3),
         boxShadow: [
           BoxShadow(
-            color: data.color.withOpacity(0.3),
+            color: data.color.withValues(alpha: 0.3),
             blurRadius: 25,
             spreadRadius: 2,
           )
@@ -183,7 +183,7 @@ class _SelectUserTypeScreenState extends State<SelectUserTypeScreen> {
                 color: isSelected ? data.color : Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   )
@@ -231,7 +231,7 @@ class _SelectUserTypeScreenState extends State<SelectUserTypeScreen> {
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           elevation: 4,
-          shadowColor: data.color.withOpacity(0.4),
+          shadowColor: data.color.withValues(alpha: 0.4),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

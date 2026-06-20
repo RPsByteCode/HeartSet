@@ -25,9 +25,6 @@ class _BookApointmentState extends State<BookApointment> {
 
   @override
   Widget build(BuildContext context) {
-    // Determine if the "Next" button should be enabled
-    final bool isNextButtonEnabled = _selectedAptType != null;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -133,7 +130,7 @@ class _BookApointmentState extends State<BookApointment> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withValues(alpha: 0.5),
               spreadRadius: 1,
               blurRadius: 5,
               offset: const Offset(0, 2),

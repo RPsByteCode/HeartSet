@@ -158,7 +158,7 @@
 //         ),
 //         Container(
 //           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-//           decoration: BoxDecoration(color: tagColor.withOpacity(0.1), borderRadius: BorderRadius.circular(4)),
+//           decoration: BoxDecoration(color: tagColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(4)),
 //           child: Text(tag, style: TextStyle(color: tagColor, fontSize: 10, fontWeight: FontWeight.bold)),
 //         ),
 //         TextButton(onPressed: () {}, child: const Text("APPROVE", style: TextStyle(color: Colors.teal, fontWeight: FontWeight.bold))),
@@ -184,7 +184,7 @@
 //       padding: const EdgeInsets.symmetric(vertical: 8.0),
 //       child: Row(
 //         children: [
-//           CircleAvatar(backgroundColor: color.withOpacity(0.1), radius: 18, child: Text(initials, style: TextStyle(color: color, fontSize: 12))),
+//           CircleAvatar(backgroundColor: color.withValues(alpha: 0.1), radius: 18, child: Text(initials, style: TextStyle(color: color, fontSize: 12))),
 //           const SizedBox(width: 12),
 //           Expanded(
 //             child: Column(
@@ -499,7 +499,7 @@ class _ConsultantDashboardState extends State<ConsultantDashboard> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
             decoration: BoxDecoration(
-                color: tagColor.withOpacity(0.1),
+                color: tagColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(4)),
             child: Text(tag,
                 style: TextStyle(
@@ -538,7 +538,7 @@ class _ConsultantDashboardState extends State<ConsultantDashboard> {
       child: Row(
         children: [
           CircleAvatar(
-              backgroundColor: color.withOpacity(0.1),
+              backgroundColor: color.withValues(alpha: 0.1),
               radius: 18,
               child: Text(initials,
                   style: TextStyle(color: color, fontSize: 12))),

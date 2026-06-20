@@ -10,7 +10,7 @@ class ConfirmAppointment extends StatefulWidget {
   final String selectedTime;
   final String drName, drSpecial, aptType;
 
-  ConfirmAppointment({
+  const ConfirmAppointment({
     super.key,
     required this.selectedDate,
     required this.selectedTime,
@@ -141,7 +141,7 @@ class _ConfirmAppointmentState extends State<ConfirmAppointment> {
                                 children: [
                                   SizedBox(width: 10),
                                   Text(
-                                    "${widget.selectedTime}",
+                                    widget.selectedTime,
                                     style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                                   ),
                                 ],
